@@ -1,0 +1,101 @@
+--- mod_clamav.c.orig	2007-03-12 13:54:32 +0300
++++ mod_clamav.c	2007-03-12 13:53:59 +0300
+@@ -9,6 +9,8 @@
+ **  $Id: apache2-mod_clamav-0.21-apache22.patch,v 1.1 2007-10-21 23:13:56 yselkowitz Exp $
+ */ 
+ 
++#define off64_t __off64_t
++
+ #include "httpd.h"
+ #include "http_config.h"
+ #include "http_protocol.h"
+@@ -17,7 +19,6 @@
+ #include "ap_config.h"
+ #include "apr_strings.h"
+ #include "apr_time.h"
+-#include "apr_compat.h"
+ #include <clamav.h>
+ #include <fcntl.h>
+ #include <errno.h>
+@@ -78,6 +79,23 @@
+ #define MATCH_SAFE_URI	0
+ #define MATCH_SAFE_HOST	1
+ 
++/*********************************************************************/
++/* It will be nice, to rewrite code... But there is to few time :-( */
++#define APR_RING_FOREACH(ep, hp, elem, link)                            \
++    for ((ep)  = APR_RING_FIRST((hp));                                  \
++         (ep) != APR_RING_SENTINEL((hp), elem, link);                   \
++         (ep)  = APR_RING_NEXT((ep), link))
++              
++
++#define APR_BRIGADE_FOREACH(e, b)                                       \
++        APR_RING_FOREACH((e), &(b)->list, apr_bucket, link)
++
++#define REG_EXTENDED 0
++
++APR_DECLARE(apr_status_t) apr_explode_localtime(apr_time_exp_t *result,
++                                                apr_time_t input);
++                                                
++/*********************************************************************/
+ typedef struct clamav_virusinfo {
+     pid_t	pid;	/* the process id of the apache process that detected */
+ 			/* the virus */
+@@ -148,7 +166,7 @@
+ 
+ typedef struct clamav_safeuri {
+ 	char	pattern[VIRUS_URI_LENGTH];
+-	regex_t	*regex;
++	ap_regex_t	*regex;
+ 	int	matchtype;
+ } clamav_safeuri;
+ 
+@@ -271,9 +289,9 @@
+ 	return;
+ 
+     /* set the individual notes						*/
+-    ap_table_set(notes, MOD_CLAMAV_STATUS_NOTE, status ? status : "-");
+-    ap_table_set(notes, MOD_CLAMAV_DETAILS_NOTE, details ? details : "-");
+-    ap_table_set(notes, MOD_CLAMAV_VIRUSNAME_NOTE, virusname ? virusname : "-");
++    apr_table_set(notes, MOD_CLAMAV_STATUS_NOTE, status ? status : "-");
++    apr_table_set(notes, MOD_CLAMAV_DETAILS_NOTE, details ? details : "-");
++    apr_table_set(notes, MOD_CLAMAV_VIRUSNAME_NOTE, virusname ? virusname : "-");
+ 
+     /* build a long status message from the individual parts		*/
+     if (status) {
+@@ -301,7 +319,7 @@
+     }
+ 
+     /* add the status to the notes table				*/
+-    ap_table_set(notes, MOD_CLAMAV_LONGSTATUS_NOTE,
++    apr_table_set(notes, MOD_CLAMAV_LONGSTATUS_NOTE,
+ 	longstatus ? longstatus : "-");
+ } /* clamav_set_status_note */
+ 
+@@ -381,7 +399,7 @@
+ 	goto unsafe;
+ 
+     /* if mod_dnsbl told us something, we may have no other choice	*/
+-    action = ap_table_get(f->r->notes, "dnsbl:scan");
++    action = apr_table_get(f->r->notes, "dnsbl:scan");
+     if (NULL != action) {
+ 	clamav_ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, f->r,
+ 	    "[%d] checking dnsbl:action: %s", (int)getpid(), action);
+@@ -964,7 +982,7 @@
+ 
+     ap_rputs("  <tr>\n", r);
+     ap_rprintf(r, "    <td>%d</td>\n", (int)(v->pid));
+-    apr_explode_localtime(&t, v->when);
++    ap_explode_recent_localtime(&t, v->when);
+     apr_strftime(when, &ret, sizeof(when), "%d %b %Y %H:%M:%S", &t);
+     ap_rprintf(r, "    <td>%s</td>\n", when);
+     ap_rprintf(r, "    <td>%s</td>\n", v->req);
+@@ -1983,7 +2001,7 @@
+ static const char	*clamav_add_safeuri(cmd_parms *parms, void *mconfig,
+     const char *type, const char *safeuri) {
+     clamav_safeuri	*p;
+-    regex_t		*preg;
++    ap_regex_t		*preg;
+ 
+     /* get the module configuration record */
+     clamav_config_rec  *rec = (clamav_config_rec *)mconfig;

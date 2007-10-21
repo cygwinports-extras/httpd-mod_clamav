@@ -1,0 +1,6 @@
+category: Web
+requires: cygwin apache2 libapr1 libaprutil1 libclamav2
+sdesc: "Apache 2 ClamAV filter module"
+ldesc: "mod_clamav is an Apache 2 filter which scans the content 
+delivered by the proxy module (mod_proxy) for viruses using the Clamav 
+virus scanning engine."
