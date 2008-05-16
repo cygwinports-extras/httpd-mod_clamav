@@ -5,22 +5,21 @@ the proxy module (mod_proxy) for viruses using the Clamav virus scanning
 engine.
 
 Runtime requirements:
-  cygwin-1.5.24-2
+  cygwin-1.5.25-11
   apache2-2.2.6-1
-  libapr1-1.2.11-1
-  libaprutil1-1.2.10-1
-  libclamav2-0.91.2-1
+  libapr1-1.2.12-1
+  libaprutil1-1.2.12-1
+  libclamav3-0.92.1-1
 
 Build requirements:
 (besides corresponding -devel packages)
-  cygwin-1.5.24-2
   autoconf2.5-2.61-1
   automake1.7-1.7.9-3
   binutils-20060817-1
-  cygport-0.3.7-1
-  gawk-3.1.5-4
+  cygport-0.3.10-1
+  gawk-3.1.6-1
   gcc-core-3.4.4-3
-  libtool1.5-1.5.23a-2
+  libtool-2.2.2-2
   make-3.81-1
   sed-4.1.5-2
 
@@ -33,15 +32,15 @@ Canonical download:
 -------------------------------------------
 
 Build instructions:
-  unpack apache2-mod_clamav-0.21-X-src.tar.bz2
+  unpack apache2-mod_clamav-0.22-X-src.tar.bz2
     if you use setup to install this src package, it will be
 	 unpacked under /usr/src automatically
   cd /usr/src
-  cygport ./apache2-mod_clamav-0.21-X.cygport all
+  cygport ./apache2-mod_clamav-0.22-X.cygport all
 
 This will create:
-  /usr/src/apache2-mod_clamav-0.21-X-src.tar.bz2
-  /usr/src/apache2-mod_clamav-0.21-X.tar.bz2
+  /usr/src/apache2-mod_clamav-0.22-X-src.tar.bz2
+  /usr/src/apache2-mod_clamav-0.22-X.tar.bz2
 
 -------------------------------------------
 
@@ -52,18 +51,20 @@ Files included in the binary package:
   /etc/preremove/apache2-mod_clamav.sh
   /usr/lib/apache2/mod_clamav.la
   /usr/lib/apache2/mod_clamav.so
-  /usr/share/doc/Cygwin/apache2-mod_clamav-0.21.README
-  /usr/share/doc/apache2-mod_clamav-0.21/AUTHORS
-  /usr/share/doc/apache2-mod_clamav-0.21/COPYING
-  /usr/share/doc/apache2-mod_clamav-0.21/ChangeLog
-  /usr/share/doc/apache2-mod_clamav-0.21/INSTALL
-  /usr/share/doc/apache2-mod_clamav-0.21/NEWS
-  /usr/share/doc/apache2-mod_clamav-0.21/README
-  /usr/share/doc/apache2-mod_clamav-0.21/TODO
+  /usr/share/doc/apache2-mod_clamav-0.22/AUTHORS
+  /usr/share/doc/apache2-mod_clamav-0.22/COPYING
+  /usr/share/doc/apache2-mod_clamav-0.22/ChangeLog
+  /usr/share/doc/apache2-mod_clamav-0.22/INSTALL
+  /usr/share/doc/apache2-mod_clamav-0.22/NEWS
+  /usr/share/doc/apache2-mod_clamav-0.22/README
+  /usr/share/doc/apache2-mod_clamav-0.22/TODO
 
 ------------------
 
 Port Notes:
+
+----- version 0.22-1 -----
+Version bump for ClamAV 0.92.
 
 ----- version 0.21-1 -----
 Initial release for Cygwin.
