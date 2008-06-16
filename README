@@ -5,18 +5,18 @@ the proxy module (mod_proxy) for viruses using the Clamav virus scanning
 engine.
 
 Runtime requirements:
-  cygwin-1.5.25-11
+  cygwin-1.5.25-15
   apache2-2.2.6-1
   libapr1-1.2.12-1
   libaprutil1-1.2.12-1
-  libclamav3-0.92.1-1
+  libclamav4-0.93-1
 
 Build requirements:
 (besides corresponding -devel packages)
   autoconf2.5-2.61-1
   automake1.7-1.7.9-3
-  binutils-20060817-1
-  cygport-0.3.10-1
+  binutils-20080523-1
+  cygport-0.3.12-1
   gawk-3.1.6-1
   gcc-core-3.4.4-3
   libtool-2.2.2-2
@@ -62,6 +62,9 @@ Files included in the binary package:
 ------------------
 
 Port Notes:
+
+----- version 0.22-2 -----
+Rebuilt for ClamAV 0.93.
 
 ----- version 0.22-1 -----
 Version bump for ClamAV 0.92.

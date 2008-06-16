@@ -1,0 +1,22 @@
+inherit apache
+
+HOMEPAGE="http://software.othello.ch/mod_clamav/"
+SRC_URI="http://software.othello.ch/${ORIG_PN}/${ORIG_P}.tar.gz"
+# http://alt.linux.kiev.ua/srpm/apache2-mod_clamav/patches
+PATCH_URI="
+	${PN}-0.21-apache22.patch
+"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	cd ${B}
+	apache_compile
+}
+
+src_install() {
+	cd ${B}
+	doapachemod ${ORIG_PN}
+	doapacheconf ${S}/sample.conf ${S}/safepatterns.conf
+	apache_postinst
+}
