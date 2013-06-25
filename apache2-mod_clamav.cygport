@@ -1,0 +1,30 @@
+inherit apache2
+
+NAME="apache2-mod_clamav"
+VERSION=0.23
+RELEASE=1
+CATEGORY="Web"
+SUMMARY="Apache 2 ClamAV filter module"
+DESCRIPTION="mod_clamav is an Apache 2 filter which scans the content
+delivered by the proxy module (mod_proxy) for viruses using the Clamav
+virus scanning engine."
+HOMEPAGE="http://software.othello.ch/mod_clamav/"
+SRC_URI="http://software.othello.ch/mod_clamav/mod_clamav-${VERSION}.tar.gz"
+SRC_DIR="mod_clamav-${VERSION}"
+PATCH_URI="0.22-cygwin-layout.patch"
+
+src_compile() {
+	cd ${S}
+	cygautoreconf
+	cd ${B}
+	apache2_compile
+}
+
+src_install() {
+	cd ${B}
+	doapache2mod mod_clamav
+	doapache2conf ${S}/sample.conf ${S}/safepatterns.conf
+	apache2_postinst
+}
+
+KEEP_LA_FILES="none"
