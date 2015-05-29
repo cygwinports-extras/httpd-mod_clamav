@@ -1,0 +1,22 @@
+--- origsrc/mod_clamav-0.23/sample.conf	2004-03-21 17:25:53.000000000 -0600
++++ src/mod_clamav-0.23/sample.conf	2015-05-22 11:04:54.514913900 -0500
+@@ -14,7 +14,7 @@ LoadModule clamav_module      modules/mo
+ ClamavTmpdir    /var/tmp/clamav
+ 
+ # the db directory is only needed in local mode
+-ClamavDbdir     /usr/local/share/clamav
++ClamavDbdir     /var/lib/clamav
+ 
+ # bypass scanning of jpeg images
+ ClamavSafetypes image/jpg
+@@ -32,8 +32,8 @@ ClamavSizelimit		1000000
+ # names for shared memory and mutex. Note that we don't know exactly what
+ # apache does in the background. However, we should make sure that apache
+ # can create these files if necessary
+-ClamavShm	/usr/local/apache2/logs/clamav.shm
+-ClamavMutex	/usr/local/apache2/logs/clamav.lock
++ClamavShm	run/clamav.shm
++ClamavMutex	run/clamav.lock
+ 
+ # if the daemon crashes, we will have a problem connecting to it. Since
+ # we don't have any PCs, we are not very paranoid about this

@@ -1,8 +1,8 @@
-inherit apache2
+inherit httpd
 
-NAME="apache2-mod_clamav"
+NAME="httpd-mod_clamav"
 VERSION=0.23
-RELEASE=1
+RELEASE=2
 CATEGORY="Web"
 SUMMARY="Apache 2 ClamAV filter module"
 DESCRIPTION="mod_clamav is an Apache 2 filter which scans the content
@@ -11,20 +11,20 @@ virus scanning engine."
 HOMEPAGE="http://software.othello.ch/mod_clamav/"
 SRC_URI="http://software.othello.ch/mod_clamav/mod_clamav-${VERSION}.tar.gz"
 SRC_DIR="mod_clamav-${VERSION}"
-PATCH_URI="0.22-cygwin-layout.patch"
+PATCH_URI="0.23-cygwin-layout.patch"
 
 src_compile() {
 	cd ${S}
 	cygautoreconf
 	cd ${B}
-	apache2_compile
+	httpd_mod_compile
 }
 
 src_install() {
 	cd ${B}
-	doapache2mod mod_clamav
-	doapache2conf ${S}/sample.conf ${S}/safepatterns.conf
-	apache2_postinst
+	dohttpdmod mod_clamav
+	dohttpdconf ${S}/sample.conf ${S}/safepatterns.conf
+	make_etc_defaults ${HTTPD_SYSCONFDIR}
 }
 
 KEEP_LA_FILES="none"
