@@ -2,7 +2,7 @@ inherit httpd
 
 NAME="httpd-mod_clamav"
 VERSION=0.23
-RELEASE=2
+RELEASE=3
 CATEGORY="Web"
 SUMMARY="Apache 2 ClamAV filter module"
 DESCRIPTION="mod_clamav is an Apache 2 filter which scans the content
